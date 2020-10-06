@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>Hospital</title>
+    </h:head>
+    
+    <h:body>
+        <h:form>
+            
+            <p:panel styleClass="cabecalho" >
+                <h:panelGrid columns="2" style="width: 100%; text-align: center;">
+                    <h:outputText style="font-size: 24px;" value="Hospital Veterinário"/>  
+                </h:panelGrid>
+            </p:panel>
+            
+            <p/>
+            
+            <p:growl id="messages" showDetail="true"/>
+
+            <p:menuButton value="Administrador">
+                <p:menuitem value="Inserir" action="#{admControle.abrePopupNovo()}" />
+                <p:menuitem value="Listar" action="adm/adm"/>
+                <p:menuitem value="Delete" action="#{admControle.abrePopupAltera()}" ajax="false"/>
+            </p:menuButton>
+            
+            <p:menuButton value="Animal">
+                <p:menuitem value="Inserir" action="#{animalControle.abrePopupNovo()}"/>
+                <p:menuitem value="Listar" outcome="animal/animal"/>
+                <p:menuitem value="Delete" action="#{menuView.delete}" ajax="false"/>
+            </p:menuButton>
+            
+            <p:menuButton value="Dono">
+                <p:menuitem value="Inserir" action="#{donoControle.abrePopupNovo()}"/>
+                <p:menuitem value="Listar" outcome="dono/dono"/>
+                <p:menuitem value="Delete" action="#{menuView.delete}"/>
+            </p:menuButton>
+          
+            <p/>
+            
+            <p:layoutUnit id= "tabela" position="center">
+                    
+            </p:layoutUnit>
+            
+        </h:form>
+        
+        
+        
+        
+        
+    </h:body>
+</html>
