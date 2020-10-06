@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Hospital Veterinário</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    <h:form>
+                        <p/>
+                        <p:panel styleClass="cabecalho" >
+                            <h:panelGrid columns="2" style="width: 100%; text-align: center;">
+                                <h:outputText  style=" font-size: 24px;" value="Hospital Veterinário " />                
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form>
+                </p:layoutUnit>
+                
+                <p:layoutUnit position="east" size="242" header="Menu" collapsible="true">
+           
+                    <p:menu>
+                        <p:menuitem value="Administradores" outcome ="adm/adm" update="formPrincipal" />
+                        <p:menuitem value="Animais" outcome="animal/animal" />
+                        <p:menuitem value="Donos" outcome="dono/dono" />
+                    </p:menu>
+                </p:layoutUnit>
+                
+                
+                
+                
+                <p:layoutUnit id= "tabela" position="center">
+                    <h:form id="formPrincipal">
+                        <p:dataTable var="adm" value="#{admControle.lista}"
+                                     tableStyle="width:auto;  min-width: 100%"> 
+                            <p:column headerText="Id" visible="false">
+                                <h:outputText value="#{adm.id}" />
+                            </p:column>
+                            <p:column headerText="Login:" visible="false">
+                                <h:outputText value="#{adm.login}" />
+                            </p:column>
+                            <p:column headerText="Nome:" visible="false">
+                                <h:outputText value="#{adm.nome}" />
+                            </p:column>  
+                        </p:dataTable>
+                    </h:form>
+                </p:layoutUnit>
+
+            </p:layout>
+            
+
+        </h:body>
+
+    </f:view>
+</html>
+

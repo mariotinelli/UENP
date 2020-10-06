@@ -1,0 +1,167 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <h:form >
+                <p:commandButton styleClass="button" value="Menu" action="/testeMenu"/>
+            </h:form>
+            <p/>
+            
+            <h:form id="formPrincipal" >
+                <p:dataTable var="animal" value="#{animalControle.lista}"
+                             tableStyle="width:auto;  min-width: 100%" > 
+                    <p:column headerText="Id">
+                        <h:outputText value="#{animal.id}" />
+                    </p:column>
+                    <p:column headerText="Nome:">
+                        <h:outputText value="#{animal.nome}" />
+                    </p:column>
+                    <p:column headerText="Espécie:">
+                        <h:outputText value="#{animal.especie}" />
+                    </p:column>    
+                    <p:column headerText="Raça:">
+                        <h:outputText value="#{animal.raca}" />
+                    </p:column>
+                    <p:column headerText="Peso:">
+                        <h:outputText value="#{animal.peso}" />
+                    </p:column>
+                    <p:column headerText="Idade:">
+                        <h:outputText value="#{animal.idade}" />
+                    </p:column>
+                    <p:column headerText="Dono:">
+                        <h:outputText value="#{animal.dono.nome}" />
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{animalControle.alterar()}" 
+                                       styleClass="link"
+                                       update=":popupAltera" type="button" value="alterar" >
+                            <f:setPropertyActionListener value="#{animal.consulta}" target="#{animalControle.animal.consulta}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink styleClass="link" value="excluir"
+                                       action="#{animalControle.excluir(animal)}"                                             
+                                       update=":formPrincipal" >
+                            <p:confirm header="Excluir animal" 
+                                       message="Você tem certeza que deseja excluir este animal?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center; width: 200px" >
+                        <p:commandButton styleClass="button" value="Historico de consulta" action="#{animalControle.alterar()}" update=":popupConsulta">
+                            <f:setPropertyActionListener value="#{animal.consulta}" target="#{animalControle.animal.consulta}" />
+                        </p:commandButton>
+
+                    </p:column>
+                </p:dataTable>   
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                        <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:outputPanel>
+                </p:confirmDialog> 
+            </h:form>
+            
+            
+            <p:dialog closable="false" modal="true" header="Historico de consulta"
+                      id="popupConsulta"
+                      visible="#{animalControle.popupAltera}" >
+                <h:form id="formPopupConsulta">
+                    <p:dataTable var="consulta" value="#{animalControle.animal.consulta}"
+                                 tableStyle="width:auto;  min-width: 100%" >
+                        <p:column headerText="ID">
+                            <h:outputLabel  value="#{consulta.id}" />
+                        </p:column>
+
+                        <p:column headerText="Data">
+                            <h:outputLabel value="#{consulta.data.time}">
+                                <f:convertDateTime  pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputLabel>
+                        </p:column>
+
+                       <p:column headerText="Animal">
+                            <h:outputLabel value="#{consulta.animal.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Medico">
+                            <h:outputLabel value="#{consulta.medico.nome}"/> 
+                        </p:column>
+
+                        <p:column headerText="Prontuario">
+                            <h:outputLabel value="#{consulta.prontuario}"/> 
+                        </p:column>   
+                    </p:dataTable>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:right" >
+                        <p:commandButton value="Fechar" action="#{animalControle.fecharPopupAltera()}" 
+                                         update=":popupConsulta" immediate="true" />                      
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                    
+                </h:form>
+            </p:dialog> 
+ 
+           
+ 
+            
+
+            <p:dialog closable="false" modal="true" header="Alteração"
+                      id="popupAltera"
+                      visible="#{animalControle.popupAltera}" >
+                <h:form id="formPopupAltera">
+                    <h:panelGrid columns="2">
+                         <p:outputLabel value="Nome "/>
+                        <p:inputText id="campoNome" value="#{animalControle.animal.nome}" 
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Nome obrigatório" > 
+                        </p:inputText>
+                        <p:outputLabel value="Espécie "/>
+                        <p:inputText value="#{animalControle.animal.especie}" maxlength="30"
+                                     required="true" requiredMessage="Espécie obrigatória"/>
+                        <p:outputLabel value="Raça" />
+                        <p:inputText value="#{animalControle.animal.raca}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Raca obrigatória"/>
+                        <p:outputLabel value="Peso" />
+                        <p:inputText value="#{animalControle.animal.peso}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Peso obrigatório"/>  
+                        <p:outputLabel value="Idade" />
+                        <p:inputText value="#{animalControle.animal.idade}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Idade obrigatória"/>      
+                        <p:outputLabel value="Dono:  " />
+                        <p:selectOneMenu id="comboDonos" converter="donoConverter" 
+                                 required="true" requiredMessage="Selecione um dono"  
+                                 value="#{animalControle.animal.dono}" >
+                        <f:selectItem itemValue="#{null}" itemLabel="Escolha um dono" 
+                                  noSelectionOption="false"/>
+                        <f:selectItems value="#{animalControle.donos}" 
+                                   var="dono"
+                                   itemValue="#{dono}"
+                                   itemLabel="#{dono.nome}"/>
+                        </p:selectOneMenu>
+                        <p/>                          
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{animalControle.fecharPopupAltera()}" 
+                                         update=":popupAltera" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{animalControle.alterarAnimal()}" 
+                                         update=":formPrincipal :popupAltera"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

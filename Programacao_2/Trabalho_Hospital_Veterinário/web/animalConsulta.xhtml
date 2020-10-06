@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <p:dialog closable="false" modal="true" header="Nova Consulta" 
+                      id="popupNovoConsulta"  visible="#{consultaControle.popupNovoConsulta}" >
+                <h:form>
+                    <p:dataTable var="consulta" value="#{animalControle.animal.consulta}"
+                                 tableStyle="width:auto;  min-width: 100%" >
+                        <p:column headerText="ID">
+                            <h:outputLabel  value="#{consulta.id}" />
+                        </p:column>
+
+                        <p:column headerText="Data">
+                            <h:outputLabel value="#{consulta.data.time}">
+                                <f:convertDateTime  pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputLabel>
+                        </p:column>
+
+                       <p:column headerText="Animal">
+                            <h:outputText value="#{consulta.animal.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Medico">
+                            <h:outputText value="#{consulta.medico.nome}"/> 
+                        </p:column>
+
+                        <p:column headerText="Prontuario">
+                            <h:outputText value="#{consulta.prontuario}"/> 
+                        </p:column>   
+
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

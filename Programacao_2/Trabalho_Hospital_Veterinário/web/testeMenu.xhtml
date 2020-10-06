@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>Hospital Veteninário</title>
+    </h:head>
+    
+    
+    <h:body>  
+        <p:panel style="text-align: center; font-size: 24px">        
+            <h:form>
+                <h:outputText value="Hospital Veterinário"/>           
+            </h:form>             
+        </p:panel>
+        <p/>
+        
+         
+        <h:form id="formPrincipal">
+                
+            <p:growl id="messages" showDetail="true" />
+                <p:menuButton value="Administrador" >
+                    <p:menuitem value="Inserir Administrador" action="#{admControle.abrePopupNovo()}"  ajax="false"/>
+                    <p:menuitem value="Listar Administrador" action="adm/adm"  ajax ="false"/>
+                </p:menuButton>
+            
+                <p:menuButton value="Dono">
+                    <p:menuitem value="Inserir Dono" action="#{donoControle.abrePopupNovoDono()}"  ajax="false"/>
+                    <p:menuitem value="Listar" outcome="dono/dono" ajax="false"/>
+                </p:menuButton>
+
+                <p:menuButton value="Animal">
+                    <p:menuitem value="Inserir Animal" action="#{animalControle.abrePopupNovoAnimal()}"  ajax="false"/>
+                    <p:menuitem value="Listar Animais" action="animal/animal"  ajax="false"/>
+                </p:menuButton>
+            
+                <p:menuButton value="Medico">
+                    <p:menuitem value="Inserir Medico" action="#{medicoControle.abrePopupNovoMedico()}"  ajax="false"/>
+                    <p:menuitem value="Listar" outcome="medico/medico" ajax="false"/>
+                </p:menuButton> 
+            
+                <p:menuButton value="Consulta">
+                    <p:menuitem value="Nova Consulta" action="#{consultaControle.abrePopupNovoConsulta()}"  ajax="false"/>
+                    <p:menuitem value="Listar" outcome="consulta/consulta" ajax="false"/>
+                </p:menuButton> 
+
+            
+        </h:form>
+        
+        
+        <p:dialog closable="false" modal="true" header="Novo administrador" 
+                id="popupNovo"  visible="#{admControle.popupNovo}" >
+          <h:form id="formPopupNovo" >
+              <h:panelGrid columns="2">
+                  <p:outputLabel value="Login "/>
+                  <p:inputText id="campoLogin" value="#{admControle.adm.login}" 
+                               maxlength="10" 
+                               required="true" requiredMessage="Login obrigatório" > 
+                      <p:ajax listener="#{admControle.converter()}" update="campoLogin" />
+                  </p:inputText>
+                  <p:outputLabel value="Nome "/>
+                  <p:inputText value="#{admControle.adm.nome}" maxlength="30"
+                               required="true" requiredMessage="Nome obrigatório"/>
+                  <p:outputLabel value="Senha" />
+                  <p:password redisplay="false" value="#{admControle.adm.senha}"
+                              maxlength="10" 
+                              required="true" requiredMessage="Senha obrigatória"/>                     
+              </h:panelGrid>
+              <p/>
+              <p:outputPanel style="width: 100%; text-align:center" >
+                  <p:commandButton value="Cancelar" action="#{admControle.fecharPopupNovo}" 
+                                   update=":formPrincipal, :popupNovo" immediate="true" />
+                  <p:commandButton value="Confirmar" action="#{admControle.inserir()}" 
+                                   update=":popupNovo, :formPrincipal"/>                           
+              </p:outputPanel>
+              <p:outputPanel style="width: 100%; text-align:center" >
+                  <p:messages showIcon="false" />
+              </p:outputPanel>  
+          </h:form>
+        </p:dialog>
+        
+        <p:dialog closable="false" modal="true" header="Novo animal" 
+                  id="popupNovoAnimal"  visible="#{animalControle.popupNovoAnimal}" >
+                <h:form id="formPopupNovoAnimal" >
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Nome "/>
+                        <p:inputText id="campoNome" value="#{animalControle.animal.nome}" 
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Nome obrigatório" > 
+                        </p:inputText>
+                        <p:outputLabel value="Espécie "/>
+                        <p:inputText value="#{animalControle.animal.especie}" maxlength="30"
+                                     required="true" requiredMessage="Espécie obrigatória"/>
+                        <p:outputLabel value="Raça" />
+                        <p:inputText value="#{animalControle.animal.raca}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Raca obrigatória"/>
+                        <p:outputLabel value="Peso" />
+                        <p:inputText value="#{animalControle.animal.peso}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Peso obrigatório"/>  
+                        <p:outputLabel value="Idade" />
+                        <p:inputText value="#{animalControle.animal.idade}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Idade obrigatória"/>      
+                        <p:outputLabel value="Dono:  " />
+                        <p:selectOneMenu id="comboDonos" converter="donoConverter" 
+                                 required="true" requiredMessage="Selecione um dono"  
+                                 value="#{animalControle.animal.dono}" >
+                        <f:selectItem itemValue="#{null}" itemLabel="Escolha um dono" 
+                                  noSelectionOption="false"/>
+                        <f:selectItems value="#{animalControle.donos}" 
+                                   var="dono"
+                                   itemValue="#{dono}"
+                                   itemLabel="#{dono.nome}"/>
+                        </p:selectOneMenu>
+                        <p/>      
+                        
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{animalControle.fecharPopupNovoAnimal()}" 
+                                         update=":formPrincipal, :popupNovoAnimal" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{animalControle.inserir()}" 
+                                         update=":popupNovoAnimal, :formPopupNovoAnimal" />                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages showIcon="false" />
+                    </p:outputPanel>  
+                </h:form>
+            </p:dialog>
+        
+        <p:dialog closable="false" modal="true" header="Novo dono" 
+                  id="popupNovoDono"  visible="#{donoControle.popupNovoDono}" >
+            <h:form id="formPopupNovoDono" >
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nome "/>
+                    <p:inputText id="campoNome" value="#{donoControle.dono.nome}" 
+                                 maxlength="10" 
+                                 required="true" requiredMessage="Nome obrigatório" > 
+                    </p:inputText>
+                    <p:outputLabel value="Endereço "/>
+                    <p:inputText value="#{donoControle.dono.endereco}" maxlength="30"
+                                 required="true" requiredMessage="Endereço obrigatório"/>
+                    <p:outputLabel value="CPF" />
+                    <p:inputText value="#{donoControle.dono.CPF}"
+                                 maxlength="10" 
+                                 required="true" requiredMessage="CPF obrigatório"/>
+                    <p:outputLabel value="Telefone" />
+                    <p:inputText value="#{donoControle.dono.tel}"
+                                 maxlength="10" 
+                                 required="true" requiredMessage="Telefone obrigatório"/>           
+                </h:panelGrid>
+                <p/>
+                <p:outputPanel style="width: 100%; text-align:center" >
+                    <p:commandButton value="Cancelar" action="#{donoControle.fecharPopupNovoDono()}" 
+                                     update=":formPrincipal, :popupNovoDono" immediate="true" />
+                    <p:commandButton value="Confirmar" action="#{donoControle.inserir()}" 
+                                     update=":popupNovoDono, :formPrincipal"/>                           
+                </p:outputPanel>
+                <p:outputPanel style="width: 100%; text-align:center" >
+                    <p:messages showIcon="false" />
+                </p:outputPanel>  
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog closable="false" modal="true" header="Novo Medico" 
+                  id="popupNovoMedico"  visible="#{medicoControle.popupNovoMedico}" >
+            <h:form id="formPopupNovoMedico" >
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nome "/>
+                    <p:inputText id="campoNome" value="#{medicoControle.medico.nome}" 
+                                 maxlength="10" 
+                                 required="true" requiredMessage="Nome obrigatório" > 
+                    </p:inputText>
+                    <p:outputLabel value="CPF" />
+                    <p:inputText value="#{medicoControle.medico.cpf}"
+                                 maxlength="11" 
+                                 required="true" requiredMessage="CPF obrigatório"/>        
+                </h:panelGrid>
+                <p/>
+                <p:outputPanel style="width: 100%; text-align:center" >
+                    <p:commandButton value="Cancelar" action="#{medicoControle.fecharPopupNovoMedico()}" 
+                                     update=":formPrincipal, :popupNovoMedico" immediate="true" />
+                    <p:commandButton value="Confirmar" action="#{medicoControle.inserir()}" 
+                                     update=":popupNovoMedico, :formPrincipal"/>                           
+                </p:outputPanel>
+                <p:outputPanel style="width: 100%; text-align:center" >
+                    <p:messages showIcon="false" />
+                </p:outputPanel>  
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog closable="false" modal="true" header="Nova Consulta" 
+                  id="popupNovoConsulta"  visible="#{consultaControle.popupNovoConsulta}" >
+                <h:form id="formPopupNovoConsulta" >
+                    <h:panelGrid columns="2">
+                       
+
+                        <p:outputLabel value="Animal:  " />
+                        <p:selectOneMenu id="comboAnimais" converter="animalConverter" 
+                                 required="true" requiredMessage="Selecione um animal"  
+                                 value="#{consultaControle.consulta.animal}" >
+                        <f:selectItem itemValue="#{null}" itemLabel="Escolha um animal" 
+                                  noSelectionOption="false"/>
+                        <f:selectItems value="#{consultaControle.animais}" 
+                                   var="animal"
+                                   itemValue="#{animal}"
+                                   itemLabel="#{animal.nome}"/>
+                        </p:selectOneMenu> 
+                        
+                        <p:outputLabel value="Medico:  " />
+                        <p:selectOneMenu id="comboMedicos" converter="medicoConverter" 
+                                 required="true" requiredMessage="Selecione um medico"  
+                                 value="#{consultaControle.consulta.medico}" >
+                        <f:selectItem itemValue="#{null}" itemLabel="Escolha um medico" 
+                                  noSelectionOption="false"/>
+                        <f:selectItems value="#{consultaControle.medicos}" 
+                                   var="medico"
+                                   itemValue="#{medico}"
+                                   itemLabel="#{medico.nome}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Prontuário: " />
+                        <p:inputTextarea value="#{consultaControle.consulta.prontuario}"
+                                         required="true" requiredMessage="Prontuário obrigatório"/>  
+                        <p/>      
+                        
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{consultaControle.fecharPopupNovoConsulta()}" 
+                                         update=":formPrincipal, :popupNovoConsulta" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{consultaControle.inserir()}" 
+                                         update=":popupNovoConsulta, :formPrincipal" />                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages showIcon="false" />
+                    </p:outputPanel>  
+                </h:form>
+            </p:dialog>
+        
+    </h:body>
+    
+    
+</html>
