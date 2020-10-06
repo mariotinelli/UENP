@@ -149,15 +149,10 @@ public class UDPClient {
         byte[] sendDataOpcao = new byte[1024];
         byte[] receiveDataOpcao = new byte[1024];
         
-        //int [] vetorClient = {20,15,14,13,12,10,8,7,25,9,5,4,3,2,1};
+
         System.out.println("Digite o vetor de inteiros: ");
-        //+ "e a Ordenação escolhida: 1-BubbleSort | 2-MergeSort | 3-RadixSort  ");
-       
         String sentence = inFromUser.readLine();
         sendDataVet = sentence.getBytes();
-        
-        //System.out.println("Digite a ordenação desejada: 1-BubbleSort | 2-MergeSort | 3-RadixSort ");
-        //String opcao = inFromUser.readLine();
         
         DatagramPacket sendPacket = new DatagramPacket(sendDataVet,sendDataVet.length, IPAddress, porta);
 
@@ -177,10 +172,7 @@ public class UDPClient {
         
         sentence = inFromUser.readLine();
         sendDataOpcao = sentence.getBytes();
-        
-        //System.out.println("Digite a ordenação desejada: 1-BubbleSort | 2-MergeSort | 3-RadixSort ");
-        //String opcao = inFromUser.readLine();
-        
+
         sendPacket = new DatagramPacket(sendDataOpcao,sendDataOpcao.length, IPAddress, porta);
 
         System.out.println("Enviando pacote UDP para " + servidor + ":" + porta);
