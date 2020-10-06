@@ -5,9 +5,8 @@
  */
 package TrabalhoArquivosV3;
 
-import java.io.BufferedReader;
+
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,70 +25,53 @@ import java.util.stream.Stream;
 public class LeituraFork extends RecursiveTask<List<Palavra>> {
 
     String arquivo;
-    String [] palavras;
-    List<Palavra> listaContagem;
-    
+
     public LeituraFork(String arquivo){
         this.arquivo = arquivo;
-        palavras = null;
-        listaContagem = new ArrayList();
     }
 
     @Override
     protected List<Palavra> compute() {
         System.out.println("Thread em execução " + Thread.currentThread().getName());
+        List<Palavra> listaContagem = new ArrayList();
         try {
             //Thread.sleep(5000);
-            lerArquivo();
+            listaContagem = iniciarPassos();
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(LeituraFork.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return listaContagem;
     }
+
+    
+    public List<Palavra> iniciarPassos() throws IOException, FileNotFoundException, InterruptedException{
+        List<String> leitura = LeituraFork.lerArquivo(this.arquivo);
+        String [] palavras = leitura.toString().split(" ");
+        palavras = lowerCase(palavras);
+        palavras = removerPontos(palavras);
+        palavras = removerStopwords(palavras);
+        List<Palavra> contagem = iniciarContagem(palavras);
+        return contagem;
+    }
+          
+    public static List<String> lerArquivo(String arquivo) throws FileNotFoundException, IOException, InterruptedException{
         
-    public void lerArquivo() throws FileNotFoundException, IOException, InterruptedException{
+        List<String> leitura = Files.readAllLines(Paths.get(arquivo));
+        return leitura;
         
-        
-        try (BufferedReader bf = new BufferedReader(new FileReader(arquivo))) {
-            String linha = "";
-            while (true) {
-                linha = bf.readLine();
-                if (linha != null){
-                    palavras = linha.split(" ");
-                    iniciarPassos();
-                }
-                else {
-                    break;
-                }
-            }
-            bf.close();
-//            System.out.println("-------------");
-//            exibirContagem();
-//            System.out.println("-------------");
-        }
     }
     
-    public void iniciarPassos() throws IOException, FileNotFoundException, InterruptedException{
-
-        lowerCase();
-        removerPontos();
-        removerStopwords();
-        iniciarContagem();
-        //exibirContagem();
-        
-    }
-
-    public void lowerCase(){
+    public String [] lowerCase(String [] palavras){
         
         Stream<String> aux = Arrays.stream(palavras).map(x -> x.toLowerCase());
         palavras = aux.toArray(String[]::new);
-        
+        return palavras;
     }
     
-    public void removerPontos() throws IOException, InterruptedException{
+    public String [] removerPontos(String [] palavras) throws IOException, InterruptedException{
         
-        List<String> pontos = Files.readAllLines(Paths.get("C:\\Users\\Mario\\Desktop\\Arquivos\\pontos.txt"));
+        List<String> pontos = LeituraFork.lerArquivo("C:\\Users\\Mario\\Desktop\\Arquivos\\pontos.txt");
         
         int i = 0;
         while (i < palavras.length){
@@ -107,21 +89,20 @@ public class LeituraFork extends RecursiveTask<List<Palavra>> {
                 }
             }
             i++;
-            //Thread.sleep(300);
         }
-
+        return palavras;
     }
     
-    public void removerStopwords() throws IOException{
+    public String[] removerStopwords(String [] palavras) throws IOException, FileNotFoundException, InterruptedException{
         
-        List<String> stopwords = Files.readAllLines(Paths.get("C:\\Users\\Mario\\Desktop\\Arquivos\\stopwords.txt"));
+        List<String> stopwords = LeituraFork.lerArquivo("C:\\Users\\Mario\\Desktop\\Arquivos\\stopwords.txt");
         Stream<String> aux = Arrays.stream(palavras).filter(x -> !stopwords.contains(x));
         palavras = aux.toArray(String[]::new);
-  
+        return palavras;
     }
     
-    public void iniciarContagem() throws IOException{
-        
+    public List<Palavra> iniciarContagem(String [] palavras) throws IOException{
+        List<Palavra> listaContagem = new ArrayList();
         boolean inserido = false;
         for (String palavra : palavras) {
             Palavra aux = new Palavra(palavra);
@@ -143,9 +124,10 @@ public class LeituraFork extends RecursiveTask<List<Palavra>> {
                 }
             }
         }  
+        return listaContagem;
     } 
     
-    public void exibirContagem(){
+    public void exibirContagem(List<Palavra> listaContagem){
         System.out.println("");
         System.out.println("-----------");
         for (Palavra palavra: listaContagem){
