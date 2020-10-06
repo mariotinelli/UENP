@@ -1,0 +1,95 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <h:form >
+                <p:commandButton styleClass="button" value="Menu" action="/testeMenu"/>
+            </h:form>
+            <p/>
+
+            <h:form id="formPrincipal" >
+                <p:dataTable var="dono" value="#{donoControle.lista}"
+                             tableStyle="width:auto;  min-width: 100%" > 
+                    <p:column headerText="Id">
+                        <h:outputText value="#{dono.id}" />
+                    </p:column>
+                    <p:column headerText="Nome:">
+                        <h:outputText value="#{dono.nome}" />
+                    </p:column>
+                    <p:column headerText="CPF:">
+                        <h:outputText value="#{dono.CPF}" />
+                    </p:column>    
+                    <p:column headerText="Endereço:">
+                        <h:outputText value="#{dono.endereco}" />
+                    </p:column>
+                    <p:column headerText="Telefone:">
+                        <h:outputText value="#{dono.tel}" />
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{donoControle.alterar()}" 
+                                       styleClass="link"
+                                       update=":popupAltera" type="button" value="alterar" >
+                            <f:setPropertyActionListener value="#{dono}" target="#{donoControle.dono}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink styleClass="link" value="excluir"
+                                       action="#{donoControle.excluir(dono)}"                                             
+                                       update=":formPrincipal" >
+                            <p:confirm header="Excluir dono" 
+                                       message="Você tem certeza que deseja excluir este dono?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>   
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                        <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:outputPanel>
+                </p:confirmDialog> 
+            </h:form>
+
+
+            <p:dialog closable="false" modal="true" header="Alteração"
+                      id="popupAltera"
+                      visible="#{donoControle.popupAltera}" >
+                <h:form id="formPopupAltera">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Nome "/>
+                        <p:inputText id="campoNome" value="#{donoControle.dono.nome}" 
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Nome obrigatório" > 
+                        </p:inputText>
+                        <p:outputLabel value="Endereço "/>
+                        <p:inputText value="#{donoControle.dono.endereco}" maxlength="30"
+                                     required="true" requiredMessage="Endereço obrigatório"/>
+                        <p:outputLabel value="CPF" />
+                        <p:inputText value="#{donoControle.dono.CPF}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="CPF obrigatório"/>
+                        <p:outputLabel value="Telefone" />
+                        <p:inputText value="#{donoControle.dono.tel}"
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Telefone obrigatório"/>                         
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{donoControle.fecharPopupAltera()}" 
+                                         update=":popupAltera" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{donoControle.alterarDono()}" 
+                                         update=":formPrincipal :popupAltera"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+</html>
