@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <h:form >
+                <p:commandButton styleClass="button" value="Menu" action="/testeMenu"/>
+            </h:form>
+            <p/>
+
+            <h:form id="formPrincipal" >
+                <p:dataTable var="medico" value="#{medicoControle.lista}"
+                             tableStyle="width:auto;  min-width: 100%" > 
+                    <p:column headerText="Id">
+                        <h:outputText value="#{medico.id}" />
+                    </p:column>
+                    <p:column headerText="Nome:">
+                        <h:outputText value="#{medico.nome}" />
+                    </p:column>
+                    <p:column headerText="CPF:">
+                        <h:outputText value="#{medico.cpf}" />
+                    </p:column>    
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{medicoControle.alterar()}" 
+                                       styleClass="link"
+                                       update=":popupAltera" type="button" value="alterar" >
+                            <f:setPropertyActionListener value="#{medico}" target="#{medicoControle.medico}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink styleClass="link" value="excluir"
+                                       action="#{medicoControle.excluir(medico)}"                                             
+                                       update=":formPrincipal" >
+                            <p:confirm header="Excluir medico" 
+                                       message="Você tem certeza que deseja excluir este medico?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>   
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                        <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:outputPanel>
+                </p:confirmDialog> 
+            </h:form>
+
+
+            <p:dialog closable="false" modal="true" header="Alteração"
+                      id="popupAltera"
+                      visible="#{medicoControle.popupAltera}" >
+                <h:form id="formPopupAltera">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Nome "/>
+                        <p:inputText id="campoNome" value="#{medicoControle.medico.nome}" 
+                                     maxlength="10" 
+                                     required="true" requiredMessage="Nome obrigatório" > 
+                        </p:inputText>
+                        <p:outputLabel value="CPF" />
+                        <p:inputText value="#{medicoControle.medico.cpf}"
+                                     maxlength="11" 
+                                     required="true" requiredMessage="CPF obrigatório"/>
+                       
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{medicoControle.fecharPopupAltera()}" 
+                                         update=":popupAltera" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{medicoControle.alterarMedico()}" 
+                                         update=":formPrincipal :popupAltera"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+</html>
