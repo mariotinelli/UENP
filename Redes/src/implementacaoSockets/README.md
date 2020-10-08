@@ -1,6 +1,6 @@
 # Implemetanção de uma aplicação cliente/servidor utilizando Sockets.
 
-##Utilizei o protocolo UDP.
+## Utilizei o protocolo UDP.
   
     - O cliente envia uma mensagem para o servidor contendo o vetor de inteiros que deseja ordenar.
     - O servidor recebe o vetor e envia uma mensagem fornece 3 tipos de ordenações e pergunta qual tipo de ordenação o cliente deseja.
