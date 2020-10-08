@@ -34,7 +34,7 @@ public class UDPServer {
                 String vetSentence = new String(vetReceivePacket.getData());
                 System.out.println(vetSentence);
                 
-                String [] vetorSplit = vetSentence.split(" ");
+                String [] vetorSplit = vetSentence.trim().split("\\s+");
                 String sentence = "Digite a ordenação que deseja: 1-BubbleSort | 2-MergeSort | 3-RadixSort";
                 
                 InetAddress IPAddress = vetReceivePacket.getAddress();
@@ -60,6 +60,7 @@ public class UDPServer {
                 int [] vetor = new int[tam];
                 
                 for (int i = 0; i < vetorSplit.length; i++){
+                    System.out.print(vetorSplit[i] + " ");
                     vetor[i] = Integer.parseInt(vetorSplit[i].trim());
                 }
                 
