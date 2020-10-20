@@ -1,20 +1,32 @@
+from trabalho_inteligencia_artificial.mostra_caminho import MostraCaminho
+
+
 class DepthFirstLimited:
 
-    from trabalho_inteligencia_artificial.mostra_caminho import MostraCaminho
+    def __init__(self, grafico, start, goalNode, limit = 0):
+        self.limit = limit
+        self.caminho = MostraCaminho()
+        self.pais = {}
+        self.visitados = []
+        self.lista = []
+        self.limites = {}
+        self.grafico = grafico
+        self.start = start
+        self.goalNode = goalNode
+        #self.limit = 0
 
-    caminho = MostraCaminho()
-    pais = {}
-    visitados = []
-    lista = []
-    limites = {}
+    def iniciarBusca(self):
+        self.limit = int(input('Digite um limite para sua busca: '))
+        self.depthfirst_limited()
+        self.clear()
 
-    def depthfirst_limited(self, grafico, start, goalNode, limit):
-        if self.busca(grafico, start, goalNode, limit):
-            self.caminho.mostra_caminho(start, goalNode, self.pais)
+    def depthfirst_limited(self):
+        if self.busca(self.start):
+            self.caminho.mostra_caminho(self.start, self.goalNode, self.pais)
         else:
             print('Não encontrado')
 
-    def busca(self, grafico, start, goalNode, limit, limite=0):
+    def busca(self, start, limite=0):
 
         self.visitados.append(start)
         self.lista.append(start)
@@ -23,20 +35,25 @@ class DepthFirstLimited:
         if limite == 0:
             self.limites[pai] = limite
 
-        if pai.__eq__(goalNode):
+        if pai.__eq__(self.goalNode):
             return True
 
-        if self.limites[pai] == limit:
+        if self.limites[pai] == self.limit:
             return
 
-        if len(grafico[pai]) > 0:
+        if len(self.grafico[pai]) > 0:
             limite += 1
-            for filho in grafico[pai]:
+            for filho in self.grafico[pai]:
                 if not self.visitados.__contains__(filho):
                     self.limites[filho] = self.limites[pai] + 1
                     self.pais[filho] = pai
-                    if self.busca(grafico, filho, goalNode, limit, self.limites[filho]):
+                    if self.busca(filho, self.limites[filho]):
                         return True
 
         return False
 
+    def clear(self):
+        self.lista.clear()
+        self.pais.clear()
+        self.visitados.clear()
+        self.limites.clear()

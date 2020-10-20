@@ -13,41 +13,29 @@ class Busca:
         self.goalNode = entrada.split()[1]
         self.busca = busca
         self.create = Grafo()
+        self.grafico = self.create.criaGrafo()
+        self.graficoCusto = self.create.criaGrafoCusto()
 
     def search(self):
         if self.busca.__eq__('1'):
-            grafico = self.create.criaGrafo()
-            bfs = BreadthFirst()
-            bfs.busca_bfs(bfs.visitado, grafico, self.start, self.goalNode)
-            bfs.visitado.clear()
+            bfs = BreadthFirst(self.grafico, self.start, self.goalNode)
+            bfs.iniciarBusca()
 
         elif self.busca.__eq__('2'):
-            grafico = self.create.criaGrafoCusto()
-            dj = Dijkstra()
-            dj.dijkstra(grafico, self.start, self.goalNode)
-            dj.visitados.clear()
+            dj = Dijkstra(self.graficoCusto, self.start, self.goalNode)
+            dj.iniciarBusca()
 
         elif self.busca.__eq__('3'):
-            df = DepthFirst()
-            grafico = self.create.criaGrafo()
-            df.depth_first(grafico, self.start, self.goalNode)
-            df.visitados.clear()
+            df = DepthFirst(self.grafico, self.start, self.goalNode)
+            df.iniciarBusca()
 
         elif self.busca.__eq__('4'):
-            limit = int(input('Digite um limite para sua busca: '))
-            limit = int(limit)
-            dfl = DepthFirstLimited()
-            grafico = self.create.criaGrafo()
-            dfl.depthfirst_limited(grafico, self.start, self.goalNode, limit)
-            dfl.visitados.clear()
+            dfl = DepthFirstLimited(self.grafico, self.start, self.goalNode)
+            dfl.iniciarBusca()
 
         elif self.busca.__eq__('5'):
-            limit = int(input('Digite um limite para sua busca: '))
-            limit = int(limit)
-            ids = IterativeDeepeningSearch()
-            grafico = self.create.criaGrafo()
-            ids.iterative_search(grafico, self.start, self.goalNode, limit)
-            ids.dfl.visitados.clear()
+            ids = IterativeDeepeningSearch(self.grafico, self.start, self.goalNode)
+            ids.iniciarBusca()
 
         print(' \n ')
 
