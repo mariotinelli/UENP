@@ -42,6 +42,9 @@ class Busca:
 
 if __name__ == '__main__':
 
+    Grafo().printGrafo(Grafo().criaGrafoCusto())
+    print('\n')
+    
     while True:
 
         entrada = input("Digite o estado que deseja sair e para qual estado deseja ir: ")
