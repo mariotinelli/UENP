@@ -1,17 +1,17 @@
 
-from trabalho_inteligencia_artificial.depth_first_limited import DepthFirstLimited
-from trabalho_inteligencia_artificial.mostra_caminho import MostraCaminho
+from depth_first_limited import DepthFirstLimited
+from mostra_caminho import MostraCaminho
 
 
 class IterativeDeepeningSearch:
 
-    def __init__(self, grafico, start, goalNode):
-        self.grafico = grafico
+    def __init__(self, grafo, start, goalNode):
+        self.grafo = grafo
         self.start = start
         self.goalNode = goalNode
-        self.caminho = MostraCaminho()
-        self.limit = int(input('Digite um limite para sua busca: '))
-        self.dfl = DepthFirstLimited(self.grafico, self.start, self.goalNode, self.limit)
+        self.mostraCaminho = MostraCaminho()
+        self.dfl = DepthFirstLimited(self.grafo, self.start, self.goalNode)
+        self.limit = self.dfl.limit
 
     def iniciarBusca(self):
         self.iterative_search()
@@ -19,7 +19,7 @@ class IterativeDeepeningSearch:
 
     def iterative_search(self):
         if self.busca(self.start):
-            self.caminho.mostra_caminho(self.start, self.goalNode, self.dfl.pais)
+            self.mostraCaminho.mostra_caminho(self.start, self.goalNode, self.dfl.caminho)
         else:
             print('Não encontrado')
 
@@ -28,3 +28,8 @@ class IterativeDeepeningSearch:
             if self.dfl.busca(start):
                 return True
         return False
+
+
+"""from create_grafo import Grafo
+create = Grafo()
+IterativeDeepeningSearch(create.criaGrafo(), "Arad", "Bucharest").iniciarBusca()"""

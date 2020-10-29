@@ -2,20 +2,12 @@
 
 class MostraCaminho:
 
-    def mostra_caminho(self, start, goalNode, pais):
+    def mostra_caminho(self, start, goalNode, caminho):
 
-        caminho = []
-        pai = pais[goalNode]
-        caminho.append(goalNode)
-
+        print('Caminho:', end=' ')
+        cidadePai = goalNode
         while True:
-            caminho.append(pai)
-            if pai.__eq__(start):
+            print(cidadePai, end=" -> ")
+            if cidadePai == start:
                 break
-            pai = pais[pai]
-
-        for i in reversed(range(len(caminho))):
-            if i > 0:
-                print(caminho[i], '-->', end=' ')
-            else:
-                print(caminho[i], end=' ')
+            cidadePai = caminho[cidadePai]

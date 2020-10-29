@@ -1,74 +1,63 @@
-
-
 class Dijkstra:
 
-    def __init__(self, grafico, start, goalNode):
+    def __init__(self, grafo, start, goalNode):
         self.visitados = []
-        self.lista = []
+        self.listaAdj = []
         self.custos = {}
-        self.pai = {}
-        self.caminho = []
-        self.grafico = grafico
+        self.caminho = {}
+        self.grafo = grafo
         self.start = start
         self.goalNode = goalNode
 
     def iniciarBusca(self):
         self.dijkstra()
+        self.mostrar_caminho(self.caminho)
         self.clear()
 
     def dijkstra(self):
 
-        self.lista.append(self.start)
+        self.listaAdj.append(self.start)
 
         if self.start.__eq__(self.goalNode):
             return self.start
 
-        for vertice in self.grafico.keys():
-            self.custos[vertice] = float('inf')  # inicia os vertices como infinito
+        for vertice in self.grafo.keys():
+            self.custos[vertice] = float('inf')  # inicializa o dicionarios custos em todas as keys como infinito.
 
         self.custos[self.start] = 0
-        self.pai[self.start] = self.start
 
-        while self.lista:
-            atual = self.lista.pop(0)
-            self.visitados.append(atual)
+        while self.listaAdj:
+            cidadeAtual = self.listaAdj.pop(0)
+            self.visitados.append(cidadeAtual)
 
-            #if atual.__eq__(goalNode):
-                #break
-
-            if self.grafico[atual].__len__() > 0:
-                for filho in self.grafico[atual]:
+            if self.grafo[cidadeAtual].__len__() > 0:
+                for filho in self.grafo[cidadeAtual]:
                     if not self.visitados.__contains__(filho):
-                        self.lista.append(filho)
-                    if self.custos[filho] > (self.custos[atual] + self.grafico[atual].get(filho)):
-                        self.custos[filho] = self.custos[atual] + self.grafico[atual].get(filho)
-                        self.pai[filho] = atual
+                        self.listaAdj.append(filho)
+                        # custos[Zerind] = 'inf' > custos[cidadeAtual] =  0 + grafo[cidadeAtual].get(Zerind)) = 75 ?
+                        # Verifica se o custo na key filho é maior que o custo somado com a key da cidAtual + o custo da cidAtual p/ seu filho
+                    if self.custos[filho] > (self.custos[cidadeAtual] + self.grafo[cidadeAtual].get(filho)):
+                        self.custos[filho] = self.custos[cidadeAtual] + self.grafo[cidadeAtual].get(filho)
+                        self.caminho[filho] = cidadeAtual
 
-        caminho = self.encontrar_caminho(self.start, self.goalNode, self.pai)
-        self.mostrar_caminho(caminho, self.goalNode)
-
-    def encontrar_caminho(self, start, goalNode, pai):
-        caminho = [goalNode]
-        atual = pai[goalNode]
+    def mostrar_caminho(self, caminho):
+        print('Caminho:', end=' ')
+        cidadePai = self.goalNode
         while True:
-            caminho.append(atual)
-            if atual.__eq__(start):
+            print(cidadePai, end=" -> ")
+            if cidadePai == self.start:
                 break
-            atual = pai[atual]
-        return caminho
-
-    def mostrar_caminho(self, caminho, goalNode):
-
-        for i in reversed(range(len(caminho))):
-            if i > 0:
-                print(caminho[i], ' --> ', end=" ")
-            else:
-                print(caminho[i])
-        print("O custo da viagem foi de", self.custos[goalNode])
+            cidadePai = caminho[cidadePai]
+        print("com custo de", self.custos[self.goalNode])
 
     def clear(self):
         self.visitados.clear()
-        self.lista.clear()
+        self.listaAdj.clear()
         self.custos.clear()
-        self.pai.clear()
         self.caminho.clear()
+
+
+"""from create_grafo import Grafo
+
+create = Grafo()
+Dijkstra(create.criaGrafoCusto(), "Arad", "Bucharest").iniciarBusca()"""

@@ -1,55 +1,56 @@
-
 class BreadthFirst:
 
-    def __init__(self, grafico, start, goalNode):
+    def __init__(self, grafo, start, goalNode):
         self.visitado = []
-        self.lista = []
-        self.grafico = grafico
+        self.listaAdj = []
+        self.caminho = {}
+        self.grafo = grafo
         self.start = start
         self.goalNode = goalNode
 
     def iniciarBusca(self):
-        self.busca_bfs()
+        if self.busca_bfs():
+            self.caminho_bfs(self.caminho)
+        else:
+            print("Caminho nao encontrado!")
         self.clear()
 
     def busca_bfs(self):
         self.visitado.append(self.start)
-        self.lista.append(self.start)
-        nosPai = {self.start: []}
-        caminho = [[self.goalNode]]
+        self.listaAdj.append(self.start)
 
         if self.start.__eq__(self.goalNode):
-            return caminho
+            return True
 
-        while self.lista:
-            s = self.lista.pop(0)
-            self.lista.append(s)
+        while self.listaAdj:
+            cidadeAtual = self.listaAdj.pop(0)
 
-            if s.__eq__(self.goalNode):
-                break
+            if cidadeAtual.__eq__(self.goalNode):
+                return True
 
-            for vizinho in self.grafico[s]:
-                if vizinho not in self.visitado:
-                    self.visitado.append(vizinho)
-                    self.lista.append(vizinho)
-                    nosPai[vizinho] = [s]
-        pai = nosPai[self.goalNode]
-        while True:
-            caminho.append(pai)
-            if pai.__getitem__(0).__eq__(self.start):
-                break
-            pai = nosPai[pai.__getitem__(0)]
-
-        self.caminho_bfs(caminho)
+            for filho in self.grafo[cidadeAtual]:
+                if filho not in self.visitado:
+                    self.visitado.append(filho)
+                    self.listaAdj.append(filho)
+                    self.caminho[filho] = cidadeAtual
+        return False
 
     def caminho_bfs(self, caminho):
         print('Caminho:', end=' ')
-        for i in reversed(range(len(caminho))):
-            if i > 0:
-                print(caminho[i].__getitem__(0), '-->', end=' ')
-            else:
-                print(caminho[i].__getitem__(0), end=' ')
+        cidadePai = self.goalNode
+        while True:
+            print(cidadePai, end=" -> ")
+            if cidadePai == self.start:
+                break
+            cidadePai = caminho[cidadePai]
 
     def clear(self):
         self.visitado.clear()
-        self.lista.clear()
+        self.listaAdj.clear()
+        self.caminho.clear()
+
+
+"""from create_grafo import Grafo
+
+create = Grafo()
+BreadthFirst(create.criaGrafo(), "Arad", "Arad").iniciarBusca()"""

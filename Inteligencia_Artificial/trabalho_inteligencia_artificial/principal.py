@@ -1,9 +1,9 @@
-from trabalho_inteligencia_artificial.breadth_first_search import BreadthFirst
-from trabalho_inteligencia_artificial.create_grafo import Grafo
-from trabalho_inteligencia_artificial.dijkstra_search import Dijkstra
-from trabalho_inteligencia_artificial.depth_first_search import DepthFirst
-from trabalho_inteligencia_artificial.depth_first_limited import DepthFirstLimited
-from trabalho_inteligencia_artificial.depth_first_iterative import IterativeDeepeningSearch
+from breadth_first_search import BreadthFirst
+from create_grafo import Grafo
+from dijkstra_search import Dijkstra
+from depth_first_search import DepthFirst
+from depth_first_limited import DepthFirstLimited
+from depth_first_iterative import IterativeDeepeningSearch
 
 
 class Busca:
@@ -42,9 +42,9 @@ class Busca:
 
 if __name__ == '__main__':
 
-    Grafo().printGrafo(Grafo().criaGrafoCusto())
+    Grafo().criaGrafoCusto()
     print('\n')
-    
+
     while True:
 
         entrada = input("Digite o estado que deseja sair e para qual estado deseja ir: ")

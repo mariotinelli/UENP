@@ -2,7 +2,7 @@
 
 class Grafo:
 
-    def criaGrafoCusto(self):
+    def criaGrafoCusto(self):  # Cria um grafo do mapa com os custos através de um arquivo .txt
 
         grafo = {}
 
@@ -49,7 +49,7 @@ class Grafo:
 
         return grafo
 
-    def criaGrafo(self):
+    def criaGrafo(self):  # Cria um grafo do mapa sem os custos através de um arquivo .txt
         grafo = {}
 
         arquivo = open('grafo.txt', 'r')
@@ -80,4 +80,5 @@ class Grafo:
     def printGrafo(self, grafo):
         for i in grafo:
             print(i, "->", grafo[i])
+
 

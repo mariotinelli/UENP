@@ -1,59 +1,60 @@
-from trabalho_inteligencia_artificial.mostra_caminho import MostraCaminho
+from mostra_caminho import MostraCaminho
 
 
 class DepthFirstLimited:
 
-    def __init__(self, grafico, start, goalNode, limit = 0):
-        self.limit = limit
-        self.caminho = MostraCaminho()
-        self.pais = {}
+    def __init__(self, grafo, start, goalNode):
+        self.limit = int(input('Digite um limite para sua busca: '))
+        self.mostraCaminho = MostraCaminho()
+        self.caminho = {}
         self.visitados = []
-        self.lista = []
-        self.limites = {}
-        self.grafico = grafico
+        self.listaAdj = []
+        self.limites = {start: 0}
+        self.grafo = grafo
         self.start = start
         self.goalNode = goalNode
-        #self.limit = 0
 
     def iniciarBusca(self):
-        self.limit = int(input('Digite um limite para sua busca: '))
         self.depthfirst_limited()
         self.clear()
 
     def depthfirst_limited(self):
         if self.busca(self.start):
-            self.caminho.mostra_caminho(self.start, self.goalNode, self.pais)
+            self.mostraCaminho.mostra_caminho(self.start, self.goalNode, self.caminho)
         else:
             print('Não encontrado')
 
     def busca(self, start, limite=0):
 
         self.visitados.append(start)
-        self.lista.append(start)
-        pai = self.lista.pop(0)
+        self.listaAdj.append(start)
+        cidadeAtual = self.listaAdj.pop(0)
 
-        if limite == 0:
-            self.limites[pai] = limite
-
-        if pai.__eq__(self.goalNode):
+        if cidadeAtual.__eq__(self.goalNode):
             return True
 
-        if self.limites[pai] == self.limit:
+        if self.limites[cidadeAtual] == self.limit:  # Chegou no limite escolhido.
             return
 
-        if len(self.grafico[pai]) > 0:
+        if len(self.grafo[cidadeAtual]) > 0:
             limite += 1
-            for filho in self.grafico[pai]:
+            for filho in self.grafo[cidadeAtual]:
                 if not self.visitados.__contains__(filho):
-                    self.limites[filho] = self.limites[pai] + 1
-                    self.pais[filho] = pai
+                    self.limites[filho] = self.limites[cidadeAtual] + 1
+                    self.caminho[filho] = cidadeAtual
                     if self.busca(filho, self.limites[filho]):
                         return True
 
         return False
 
     def clear(self):
-        self.lista.clear()
-        self.pais.clear()
+        self.listaAdj.clear()
+        self.caminho.clear()
         self.visitados.clear()
         self.limites.clear()
+
+"""
+from create_grafo import Grafo
+create = Grafo()
+DepthFirstLimited(create.criaGrafo(), "Arad", "Bucharest").iniciarBusca()
+"""

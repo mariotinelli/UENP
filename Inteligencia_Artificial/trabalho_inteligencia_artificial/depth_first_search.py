@@ -1,16 +1,15 @@
 
-from trabalho_inteligencia_artificial.mostra_caminho import MostraCaminho
+from mostra_caminho import MostraCaminho
 
 
 class DepthFirst:
 
-    def __init__(self, grafico, start, goalNode):
-        self.caminho = MostraCaminho()
-        self.pais = {}
+    def __init__(self, grafo, start, goalNode):
+        self.mostraCaminho = MostraCaminho()
+        self.caminho = {}
         self.visitados = []
-        self.lista = []
-        self.filhos = []
-        self.grafico = grafico
+        self.listaAdj = []
+        self.grafo = grafo
         self.start = start
         self.goalNode = goalNode
 
@@ -21,28 +20,32 @@ class DepthFirst:
     def depth_first(self):
 
         if self.busca(self.start):
-            self.caminho.mostra_caminho(self.start, self.goalNode, self.pais)
+            self.mostraCaminho.mostra_caminho(self.start, self.goalNode, self.caminho)
         else:
             print('Não encontrado')
 
     def busca(self, start):
 
         self.visitados.append(start)
-        self.lista.append(start)
-        pai = self.lista.pop(0)
+        self.listaAdj.append(start)
+        cidadeAtual = self.listaAdj.pop(0)
 
-        if pai.__eq__(self.goalNode):
+        if cidadeAtual.__eq__(self.goalNode):
             return True
 
-        for filho in self.grafico[pai]:
+        for filho in self.grafo[cidadeAtual]:
             if not self.visitados.__contains__(filho):
-                self.pais[filho] = pai
+                self.caminho[filho] = cidadeAtual
                 if self.busca(filho):
                     return True
         return False
 
     def clear(self):
-        self.pais.clear()
+        self.caminho.clear()
         self.visitados.clear()
-        self.lista.clear()
-        self.filhos.clear()
+        self.listaAdj.clear()
+
+
+"""from create_grafo import Grafo
+create = Grafo()
+DepthFirst(create.criaGrafo(), "Arad", "Bucharest").iniciarBusca()"""
