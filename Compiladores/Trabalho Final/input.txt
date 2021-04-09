@@ -1,0 +1,18 @@
+input(int, a);
+print(a);
+print(2+2);
+print("A");
+int b = 10;
+print(b);
+double c = 10.0;
+print(c);
+string d = "ABC";
+print(d);
+if ("ab" == "ab"){
+   print("sim");
+}
+else {
+   print("Nao e igual");		 
+}
+print(a + b);
+
